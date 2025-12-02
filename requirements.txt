@@ -1,0 +1,7 @@
+pytest
+httpx
+pytest-html
+pytest-asyncio
+python-dotenv
+pydantic
+jsonschema
