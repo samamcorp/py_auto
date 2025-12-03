@@ -7,8 +7,8 @@ from .config import get_settings
 
 class ApiClient:
     """
-   HTTP client based on httpx.
-   For API calls.
+    HTTP client based on httpx.
+    Central entry point for all API calls.
     """
 
     def __init__(self, base_url: str | None = None, timeout: float | None = None):
@@ -24,7 +24,7 @@ class ApiClient:
     @allure.step("GET {path}")
     def get(self, path: str, **kwargs) -> httpx.Response:
         """
-        send a GET request and log in Allure.
+        Send a GET request and log it in Allure.
         """
         response = self._client.get(path, **kwargs)
         self._attach_response("GET", path, response)
@@ -33,10 +33,28 @@ class ApiClient:
     @allure.step("POST {path}")
     def post(self, path: str, json: dict | None = None, **kwargs) -> httpx.Response:
         """
-        send a POST request and log in Allure.
+        Send a POST request and log it in Allure.
         """
         response = self._client.post(path, json=json, **kwargs)
         self._attach_response("POST", path, response)
+        return response
+
+    @allure.step("PUT {path}")
+    def put(self, path: str, json: dict | None = None, **kwargs) -> httpx.Response:
+        """
+        Send a PUT request and log it in Allure.
+        """
+        response = self._client.put(path, json=json, **kwargs)
+        self._attach_response("PUT", path, response)
+        return response
+
+    @allure.step("DELETE {path}")
+    def delete(self, path: str, **kwargs) -> httpx.Response:
+        """
+        Send a DELETE request and log it in Allure.
+        """
+        response = self._client.delete(path, **kwargs)
+        self._attach_response("DELETE", path, response)
         return response
 
     def close(self) -> None:
@@ -44,7 +62,7 @@ class ApiClient:
 
     def _attach_response(self, method: str, path: str, response: httpx.Response) -> None:
         """
-        Ajoute des informations de requête / réponse dans le rapport Allure.
+        Attach basic request/response info into Allure report.
         """
         info = (
             f"{method} {path}\n"
@@ -53,16 +71,16 @@ class ApiClient:
             f"Headers:\n{response.headers}\n"
         )
 
-        # Attacher les infos de requête/réponse
+        # Attach request/response info
         allure.attach(
             info,
             name="Request / response info",
-            attachment_type=AttachmentType.TEXT
+            attachment_type=AttachmentType.TEXT,
         )
 
-        # Attacher le corps de la réponse (toujours en TEXT pour éviter les erreurs)
+        # Attach response body (as TEXT to be safe)
         allure.attach(
             response.text,
             name="Response body",
-            attachment_type=AttachmentType.TEXT
+            attachment_type=AttachmentType.TEXT,
         )
