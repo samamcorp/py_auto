@@ -1,0 +1,27 @@
+[
+  {
+    "name": "Backend / 5xx Errors",
+    "matchedStatuses": ["failed"],
+    "traceRegex": ".*5[0-9][0-9].*"
+  },
+  {
+    "name": "Auth / Unauthorized",
+    "matchedStatuses": ["failed"],
+    "traceRegex": ".*(401|403|Unauthorized).*"
+  },
+  {
+    "name": "Timeouts",
+    "matchedStatuses": ["failed"],
+    "traceRegex": ".*timed out|timeout.*"
+  },
+  {
+    "name": "Contract Breaks / Missing Keys",
+    "matchedStatuses": ["failed"],
+    "traceRegex": ".*(KeyError|Missing|JSONDecodeError).*"
+  },
+  {
+    "name": "Assertion Failure",
+    "matchedStatuses": ["failed"],
+    "traceRegex": ".*AssertionError.*"
+  }
+]
