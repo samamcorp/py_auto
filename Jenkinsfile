@@ -23,9 +23,16 @@ pipeline {
             steps {
                 sh '''
                     source .venv/bin/activate
-                    pytest -q
+                    pytest -v -s --alluredir=allure-results
                 '''
             }
         }
+
+        stage('Generate Allure Report') {
+            steps {
+                allure includeProperties: false, jdk: '', results: [[path: 'allure-results']]
+            }
+        }
+
     }
 }
