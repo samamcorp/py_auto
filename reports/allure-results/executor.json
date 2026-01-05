@@ -1,0 +1,13 @@
+{
+  "name": "Local Run",
+  "type": "manual",
+  "buildOrder": 1765018191,
+  "buildName": "exec_test_3",
+  "reportName": "exec_test_3",
+  "environment": "Local MacOS - Python 3.13",
+  "executor": {
+    "name": "Samuel",
+    "type": "manual",
+    "hostname": "Minas-Tirith"
+  }
+}
