@@ -9,7 +9,7 @@ def test_01_post_method(api_client):
     """
     Verifies that the POST /post endpoint echoes back the JSON payload sent.
     """
-    payload = {"name": "Samuel", "age": 40}
+    payload = {"name": "Bob", "age": 40}
 
     response = api_client.post("/post", json=payload)
 
