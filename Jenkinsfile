@@ -45,7 +45,28 @@ pipeline {
 
     post {
         always {
+            // Archive HTML report
             archiveArtifacts artifacts: 'allure-report/**', allowEmptyArchive: true
+
+            // Send email
+            emailext(
+                subject: "Rapport Allure - Build #${env.BUILD_NUMBER}",
+                body: """
+                    Hello everyone,
+
+                    Test #${env.BUILD_NUMBER} has run.
+
+                    Allure report :
+                    ${env.BUILD_URL}allure/
+
+                    Artifacts :
+                    ${env.BUILD_URL}artifact/
+
+                    Best,
+                    Q.A-TEAM
+                """,
+                to: "sam@borekas.net"
+            )
         }
     }
 }
