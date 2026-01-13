@@ -11,8 +11,8 @@ pipeline {
         stage('Create virtualenv and install deps') {
             steps {
                 sh '''
-                    /Library/Frameworks/Python.framework/Versions/3.14/bin/python3.14 -m venv .venv
-                    source .venv/bin/activate
+                    python3 -m venv .venv
+                    . .venv/bin/activate
                     pip install --upgrade pip
                     pip install -r requirements.txt
                 '''
@@ -22,7 +22,7 @@ pipeline {
         stage('Run pytest') {
             steps {
                 sh '''
-                    source .venv/bin/activate
+                    . .venv/bin/activate
                     pytest -v -s --alluredir=allure-results
                 '''
             }
@@ -33,6 +33,5 @@ pipeline {
                 allure includeProperties: false, jdk: '', results: [[path: 'allure-results']]
             }
         }
-
     }
 }
