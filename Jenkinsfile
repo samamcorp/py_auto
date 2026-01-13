@@ -28,10 +28,24 @@ pipeline {
             }
         }
 
+        stage('Generate Allure HTML') {
+            steps {
+                sh '''
+                    allure generate allure-results --clean -o allure-report
+                '''
+            }
+        }
+
         stage('Generate Allure Report') {
             steps {
                 allure includeProperties: false, jdk: '', results: [[path: 'allure-results']]
             }
+        }
+    }
+
+    post {
+        always {
+            archiveArtifacts artifacts: 'allure-report/**', allowEmptyArchive: true
         }
     }
 }
