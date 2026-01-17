@@ -1,54 +1,50 @@
 pipeline {
-    agent {
-        docker {
-            image 'python:3.11'
-            args '-u'
-        }
-    }
+    agent none
 
     stages {
-        stage('Show Python version') {
-            steps {
-                sh 'python3 --version'
+        stage('Run tests in Docker') {
+            agent {
+                docker {
+                    image 'python:3.11'
+                    args '-u'
+                }
             }
-        }
 
-        stage('Create virtualenv and install deps') {
-            steps {
-                sh '''
-                    python3 -m venv .venv
-                    . .venv/bin/activate
-                    pip install --upgrade pip
-                    pip install -r requirements.txt
-                '''
-            }
-        }
+            stages {
+                stage('Show Python version') {
+                    steps {
+                        sh 'python3 --version'
+                    }
+                }
 
-        stage('Run pytest') {
-            steps {
-                sh '''
-                    . .venv/bin/activate
-                    pytest -v -s --alluredir=allure-results
-                '''
-            }
-        }
+                stage('Create virtualenv and install deps') {
+                    steps {
+                        sh '''
+                            python3 -m venv .venv
+                            . .venv/bin/activate
+                            pip install --upgrade pip
+                            pip install -r requirements.txt
+                        '''
+                    }
+                }
 
-        stage('Generate Allure HTML') {
-            steps {
-                sh '''
-                    pip install allure-pytest
-                    pip install allure-python-commons
-                    pip install allure-python-commons-test
-                    pip install allure-python-commons-model
-                    pip install allure-python-commons-report
-                    pip install allure-python-commons-testplan
+                stage('Run pytest') {
+                    steps {
+                        sh '''
+                            . .venv/bin/activate
+                            pytest -v -s --alluredir=allure-results
+                        '''
+                    }
+                }
 
-                    # if allure CLI doesn't exist :
-                    pip install allure-python-commons
-
-                    # report generation
-                    allure generate allure-results --clean -o allure-report || true
-                '''
+                stage('Generate Allure HTML') {
+                    steps {
+                        sh '''
+                            pip install allure-pytest
+                            allure generate allure-results --clean -o allure-report || true
+                        '''
+                    }
+                }
             }
         }
     }
