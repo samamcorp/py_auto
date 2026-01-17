@@ -3,6 +3,14 @@ pipeline {
 
     stages {
 
+
+        stage('Check Java in Jenkins') {
+    steps {
+        sh 'echo PATH=$PATH'
+        sh 'which java || true'
+        sh 'java -version || true'
+    }
+}
         stage('Run tests in Docker') {
             steps {
                 sh '''
