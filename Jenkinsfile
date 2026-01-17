@@ -31,7 +31,7 @@ pipeline {
         always {
             archiveArtifacts artifacts: 'allure-report/**', allowEmptyArchive: true
 
-            allure includeProperties: false, jdk: '', results: [[path: 'allure-results']]
+            allure includeProperties: false, jdk: '', results: [[path: 'allure-results']], commandline: 'allure'
 
             emailext(
                 subject: "Rapport Allure - Build #${env.BUILD_NUMBER}",
