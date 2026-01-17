@@ -6,20 +6,22 @@ pipeline {
         stage('Run tests in Docker') {
             steps {
                 sh '''
-                    echo "Running tests inside python:3.11 Docker container..."
-
                     docker run --rm \
                         -v "$PWD":/app \
                         -w /app \
                         python:3.11 bash -c "
-                            python3 -m venv .venv &&
-                            . .venv/bin/activate &&
                             pip install --upgrade pip &&
                             pip install -r requirements.txt &&
-                            pytest -v -s --alluredir=allure-results &&
-                            pip install allure-pytest &&
-                            allure generate allure-results --clean -o allure-report || true
+                            pytest -v -s --alluredir=allure-results
                         "
+                '''
+            }
+        }
+
+        stage('Generate Allure report') {
+            steps {
+                sh '''
+                    allure generate allure-results --clean -o allure-report || true
                 '''
             }
         }
@@ -43,10 +45,3 @@ pipeline {
                     ${env.BUILD_URL}artifact/
 
                     Best,
-                    Q.A-TEAM
-                """,
-                to: "sam@borekas.net"
-            )
-        }
-    }
-}
