@@ -1,38 +1,26 @@
 pipeline {
-    agent any   // Jenkins node normal
+    agent any
 
     stages {
 
         stage('Run tests in Docker') {
-            agent {
-                docker {
-                    image 'python:3.11'
-                    args '-u'
-                }
-            }
-
             steps {
-                script {
-                    sh '''
-                        echo "Python version:"
-                        python3 --version
+                sh '''
+                    echo "Running tests inside python:3.11 Docker container..."
 
-                        echo "Creating virtualenv..."
-                        python3 -m venv .venv
-                        . .venv/bin/activate
-
-                        echo "Installing dependencies..."
-                        pip install --upgrade pip
-                        pip install -r requirements.txt
-
-                        echo "Running pytest..."
-                        pytest -v -s --alluredir=allure-results
-
-                        echo "Generating Allure report..."
-                        pip install allure-pytest
-                        allure generate allure-results --clean -o allure-report || true
-                    '''
-                }
+                    docker run --rm \
+                        -v "$PWD":/app \
+                        -w /app \
+                        python:3.11 bash -c "
+                            python3 -m venv .venv &&
+                            . .venv/bin/activate &&
+                            pip install --upgrade pip &&
+                            pip install -r requirements.txt &&
+                            pytest -v -s --alluredir=allure-results &&
+                            pip install allure-pytest &&
+                            allure generate allure-results --clean -o allure-report || true
+                        "
+                '''
             }
         }
     }
