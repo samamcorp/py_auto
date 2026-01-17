@@ -1,5 +1,5 @@
 pipeline {
-    agent none
+    agent any   // Jenkins node normal (pas Docker)
 
     stages {
         stage('Run tests in Docker') {
