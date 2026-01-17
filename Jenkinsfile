@@ -1,7 +1,8 @@
 pipeline {
-    agent any   // Jenkins node normal (pas Docker)
+    agent any   // Jenkins node normal
 
     stages {
+
         stage('Run tests in Docker') {
             agent {
                 docker {
@@ -10,40 +11,27 @@ pipeline {
                 }
             }
 
-            stages {
-                stage('Show Python version') {
-                    steps {
-                        sh 'python3 --version'
-                    }
-                }
+            steps {
+                script {
+                    sh '''
+                        echo "Python version:"
+                        python3 --version
 
-                stage('Create virtualenv and install deps') {
-                    steps {
-                        sh '''
-                            python3 -m venv .venv
-                            . .venv/bin/activate
-                            pip install --upgrade pip
-                            pip install -r requirements.txt
-                        '''
-                    }
-                }
+                        echo "Creating virtualenv..."
+                        python3 -m venv .venv
+                        . .venv/bin/activate
 
-                stage('Run pytest') {
-                    steps {
-                        sh '''
-                            . .venv/bin/activate
-                            pytest -v -s --alluredir=allure-results
-                        '''
-                    }
-                }
+                        echo "Installing dependencies..."
+                        pip install --upgrade pip
+                        pip install -r requirements.txt
 
-                stage('Generate Allure HTML') {
-                    steps {
-                        sh '''
-                            pip install allure-pytest
-                            allure generate allure-results --clean -o allure-report || true
-                        '''
-                    }
+                        echo "Running pytest..."
+                        pytest -v -s --alluredir=allure-results
+
+                        echo "Generating Allure report..."
+                        pip install allure-pytest
+                        allure generate allure-results --clean -o allure-report || true
+                    '''
                 }
             }
         }
