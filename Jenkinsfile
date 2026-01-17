@@ -45,3 +45,10 @@ pipeline {
                     ${env.BUILD_URL}artifact/
 
                     Best,
+                    Q.A-TEAM
+                """,
+                to: "sam@borekas.net"
+            )
+        }
+    }
+}
