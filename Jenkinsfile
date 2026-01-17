@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    environment {
+        PATH = "/usr/local/opt/openjdk/bin:$PATH"
+    }
+
     stages {
 
 
