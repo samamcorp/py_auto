@@ -31,6 +31,8 @@ pipeline {
         always {
             archiveArtifacts artifacts: 'allure-report/**', allowEmptyArchive: true
 
+            allure includeProperties: false, jdk: '', results: [[path: 'allure-results']]
+
             emailext(
                 subject: "Rapport Allure - Build #${env.BUILD_NUMBER}",
                 body: """
@@ -47,8 +49,3 @@ pipeline {
                     Best,
                     Q.A-TEAM
                 """,
-                to: "sam@borekas.net"
-            )
-        }
-    }
-}
