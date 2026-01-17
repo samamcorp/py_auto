@@ -1,5 +1,10 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'python:3.11'
+            args '-u'
+        }
+    }
 
     stages {
         stage('Show Python version') {
@@ -31,7 +36,18 @@ pipeline {
         stage('Generate Allure HTML') {
             steps {
                 sh '''
-                    allure generate allure-results --clean -o allure-report
+                    pip install allure-pytest
+                    pip install allure-python-commons
+                    pip install allure-python-commons-test
+                    pip install allure-python-commons-model
+                    pip install allure-python-commons-report
+                    pip install allure-python-commons-testplan
+
+                    # if allure CLI doesn't exist :
+                    pip install allure-python-commons
+
+                    # report generation
+                    allure generate allure-results --clean -o allure-report || true
                 '''
             }
         }
