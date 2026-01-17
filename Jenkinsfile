@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    triggers {
+        cron('H 2 * * *')
+    }
+
     environment {
         PATH = "/usr/local/opt/openjdk/bin:$PATH"
     }
