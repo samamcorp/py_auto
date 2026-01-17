@@ -5,13 +5,20 @@ pipeline {
         cron('H 2 * * *')
     }
 
+    
+
     environment {
         PATH = "/usr/local/opt/openjdk/bin:$PATH"
     }
 
     stages {
 
-
+        stage('Check cron') {
+            steps {
+                echo "Cron is active"
+            }
+        }
+        
         stage('Check Java in Jenkins') {
     steps {
         sh 'echo PATH=$PATH'
