@@ -35,20 +35,12 @@ pipeline {
                 '''
             }
         }
-
-        stage('Generate Allure Report') {
-            steps {
-                allure includeProperties: false, jdk: '', results: [[path: 'allure-results']]
-            }
-        }
     }
 
     post {
         always {
-            // Archive HTML report
             archiveArtifacts artifacts: 'allure-report/**', allowEmptyArchive: true
 
-            // Send email
             emailext(
                 subject: "Rapport Allure - Build #${env.BUILD_NUMBER}",
                 body: """
@@ -57,7 +49,7 @@ pipeline {
                     Test #${env.BUILD_NUMBER} has run.
 
                     Allure report :
-                    ${env.BUILD_URL}allure/
+                    ${env.BUILD_URL}artifact/allure-report/index.html
 
                     Artifacts :
                     ${env.BUILD_URL}artifact/
