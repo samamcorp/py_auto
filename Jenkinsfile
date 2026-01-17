@@ -49,3 +49,8 @@ pipeline {
                     Best,
                     Q.A-TEAM
                 """,
+                to: "sam@borekas.net"
+            )
+        }
+    }
+}
