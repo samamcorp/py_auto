@@ -64,7 +64,7 @@ pipeline {
                     Test #${env.BUILD_NUMBER} has run.
 
                     Allure report :
-                    ${env.BUILD_URL}artifact/allure-report/index.html
+                    ${env.BUILD_URL}allure
 
                     Artifacts :
                     ${env.BUILD_URL}artifact/
