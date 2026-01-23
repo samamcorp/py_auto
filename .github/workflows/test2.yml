@@ -23,5 +23,6 @@ jobs:
           port: 22
           script: |
             whoami
-            mkdir folder_test1
-            touch folder_test1/testfile01.log
+            DIR="folder_test_$(date +%d%m%Y_%H%M%S)"
+            mkdir -p "$DIR"
+            touch "$DIR/testfile.log"
