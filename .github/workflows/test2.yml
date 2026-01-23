@@ -1,0 +1,19 @@
+name: connection test
+on: [workflow_dispatch]
+jobs:
+  build:
+    name: Create directory
+    runs-on: ubuntu-latest
+    steps:
+      - name: Execute remote SSH commands using password
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: whoami
+      - name: create folder
+        run: mkdir folder_test1
+      - name: create file
+        run: touch testfile01.log
