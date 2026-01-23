@@ -10,16 +10,16 @@ jobs:
     steps:
       - name: Debug SSH key
         run: |
-          echo "KEY LENGTH = ${#SSH_KEY}"
+          echo "KEY LENGTH = ${#KEY}"
         env:
-          SSH_KEY: ${{ secrets.SSH_KEY }}
+          SSH_KEY: ${{ secrets.KEY }}
 
       - name: Execute remote SSH commands
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.SSH_KEY }}
+          key: ${{ secrets.KEY }}
           port: ${{ secrets.PORT }}
           script: |
             whoami
