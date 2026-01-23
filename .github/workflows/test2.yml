@@ -1,5 +1,6 @@
 name: connection test
-on: [workflow_dispatch]
+on: 
+  workflow_dispatch
 jobs:
   build:
     name: Create directory
@@ -12,8 +13,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          script: whoami
-      - name: create folder
-        run: mkdir folder_test1
-      - name: create file
-        run: touch testfile01.log
+          script: |
+            whoami
+            mkdir folder_test1
+            touch testfile01.log
